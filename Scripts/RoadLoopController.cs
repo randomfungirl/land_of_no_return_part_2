@@ -19,7 +19,7 @@ public class RoadTeleportSystem : MonoBehaviour
     [SerializeField] private string secondSceneToLoad = "SecondScene";
 
     private static bool triggersDisabled = false;
-    private static bool isFirstCompletion = true; // Заменили alreadyCompleted
+    private static bool isFirstCompletion = true;
     private static int totalPasses = 0;
     private Flowchart flowchartCache;
     private Collider2D[] allTriggers;

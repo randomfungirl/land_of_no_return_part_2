@@ -11,6 +11,7 @@ public class PuzzleController : MonoBehaviour
     public List<GameObject> buttonStars; //список звездочек для отображения
     public Fungus.Flowchart flowchart; //ссылка на Flowchart Fungus
     public string blockName; //имя блока Fungus для вызова при успехе
+    public string blockFail; //имя блока Fungus для вызова при неудаче
     private bool playerInZone;
     private List<int> currentSequence = new List<int>(); //текущая последовательность нажатий
     private bool puzzleActive = false; //активна ли панель
@@ -107,11 +108,16 @@ public class PuzzleController : MonoBehaviour
     void ResetPuzzle()
     {
         currentSequence.Clear();
-
         //скрываем все звездочки
         foreach (GameObject star in buttonStars)
         {
             star.SetActive(false);
+        }
+        puzzleActive = false;
+        puzzlePanel.SetActive(false);
+        if (flowchart != null && !string.IsNullOrEmpty(blockName))
+        {
+            flowchart.ExecuteBlock(blockFail);
         }
     }
 
@@ -120,7 +126,6 @@ public class PuzzleController : MonoBehaviour
         //закрываем панель
         puzzleActive = false;
         puzzlePanel.SetActive(false);
-
         //вызываем блок Fungus
         if (flowchart != null && !string.IsNullOrEmpty(blockName))
         {

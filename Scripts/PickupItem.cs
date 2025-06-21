@@ -7,6 +7,15 @@ public class PickupItem : MonoBehaviour
     private bool isPlayerInTrigger = false;
     public Flowchart flowchart;
     public string afterPickupBlock = "AfterPickup";
+
+    private void Start()
+    {
+        if (InventoryManager.Instance.HasItem(item))
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))

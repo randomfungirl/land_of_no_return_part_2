@@ -19,7 +19,7 @@ public class AdvancedInteractiveTrigger : MonoBehaviour
     public string afterPickupBlock = "AfterPickup";
     public string imageRevealBlock = "ImageReveal";
     public string afterImageBlock = "AfterImage";
-    public Flowchart flowchart; // Ссылка на Flowchart Fungus
+
     [Header("Настройки изображения")]
     public bool shouldRevealImage = false;
     public GameObject imageObject;
@@ -29,15 +29,23 @@ public class AdvancedInteractiveTrigger : MonoBehaviour
     private bool playerInZone;
     private bool itemWasAdded;
     private bool imageWasRevealed;
+    private Flowchart flowchart;
 
+    // Уникальный идентификатор для сохранения
+    private string saveKey;
 
     private void Start()
     {
+        flowchart = FindFirstObjectByType<Flowchart>();
+        saveKey = $"{gameObject.scene.name}_{gameObject.name}_imageRevealed";
+
+        // Загрузка сохраненного состояния
+        imageWasRevealed = PlayerPrefs.GetInt(saveKey, 0) == 1;
 
         // Инициализация изображения
         if (imageObject != null)
         {
-            imageObject.SetActive(false);
+            imageObject.SetActive(imageWasRevealed);
         }
     }
 
@@ -97,7 +105,7 @@ public class AdvancedInteractiveTrigger : MonoBehaviour
             }
         }
 
-        // 5. Показ изображения (измененная часть)
+        // 5. Показ изображения
         if (shouldRevealImage && imageObject != null && !imageWasRevealed)
         {
             // Сначала выполняем блок перед показом изображения
@@ -110,6 +118,10 @@ public class AdvancedInteractiveTrigger : MonoBehaviour
             yield return new WaitForSeconds(imageRevealDelay);
             imageObject.SetActive(true);
             imageWasRevealed = true;
+
+            // Сохраняем состояние
+            PlayerPrefs.SetInt(saveKey, 1);
+            PlayerPrefs.Save();
         }
 
         // 6. Последующие взаимодействия
@@ -132,5 +144,18 @@ public class AdvancedInteractiveTrigger : MonoBehaviour
     {
         if (string.IsNullOrEmpty(blockName)) return;
         flowchart?.ExecuteBlock(blockName);
+    }
+
+    // Метод для сброса состояния (если нужно)
+    public void ResetTrigger()
+    {
+        itemWasAdded = false;
+        imageWasRevealed = false;
+        PlayerPrefs.DeleteKey(saveKey);
+
+        if (shouldRevealImage && imageObject != null)
+        {
+            imageObject.SetActive(false);
+        }
     }
 }

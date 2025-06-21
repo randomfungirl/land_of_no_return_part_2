@@ -1,4 +1,4 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneSwitchWithFade : MonoBehaviour
@@ -17,8 +17,8 @@ public class SceneSwitchWithFade : MonoBehaviour
     private Texture2D fadeTexture;
     private static bool isInitialized = false;
     private int fadeDir = 0; // 1 = fade out, -1 = fade in
-    private bool shouldDestroyAfterLoad = false; // Флаг для отложенного удаления
-
+    private bool shouldDestroyAfterLoad = false; // Р¤Р»Р°Рі РґР»СЏ РѕС‚Р»РѕР¶РµРЅРЅРѕРіРѕ СѓРґР°Р»РµРЅРёСЏ
+    public static string PreviousScene { get; private set; }
     void Awake()
     {
         if (isInitialized && destroyAfterSwitch)
@@ -38,6 +38,20 @@ public class SceneSwitchWithFade : MonoBehaviour
             if (transform.parent != null)
                 transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
+        }
+        
+        if (sceneName == "Tapestries")
+        {
+            if (SceneManager.GetActiveScene().name == "Codepanel")
+            {
+                PlayerPrefs.SetInt("FromCodepanelWalk", 1);
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                PlayerPrefs.SetInt("FromCodepanelWalk", 0);
+                PlayerPrefs.Save();
+            }
         }
     }
 
@@ -80,7 +94,7 @@ public class SceneSwitchWithFade : MonoBehaviour
                 {
                     if (destroyAfterSwitch)
                     {
-                        shouldDestroyAfterLoad = true; // Помечаем для удаления после загрузки
+                        shouldDestroyAfterLoad = true; // РџРѕРјРµС‡Р°РµРј РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё
                     }
                     SceneManager.LoadScene(sceneName);
                 }
