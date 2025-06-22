@@ -4,17 +4,17 @@ using System.Threading;
 public class PuzzleController : MonoBehaviour
 {
     [Header("Settings")]
-    public List<int> correctSequence = new List<int> { 1, 2, 3 }; //правильная последовательность
+    public List<int> correctSequence = new List<int> { 1, 2, 3 };
 
     [Header("References")]
-    public GameObject puzzlePanel; //ссылка на Canvas панели
-    public List<GameObject> buttonStars; //список звездочек для отображения
-    public Fungus.Flowchart flowchart; //ссылка на Flowchart Fungus
-    public string blockName; //имя блока Fungus для вызова при успехе
-    public string blockFail; //имя блока Fungus для вызова при неудаче
+    public GameObject puzzlePanel;
+    public List<GameObject> buttonStars;
+    public Fungus.Flowchart flowchart;
+    public string blockName;
+    public string blockFail;
     private bool playerInZone;
-    private List<int> currentSequence = new List<int>(); //текущая последовательность нажатий
-    private bool puzzleActive = false; //активна ли панель
+    private List<int> currentSequence = new List<int>();
+    private bool puzzleActive = false;
     private void Start()
     {
         puzzlePanel.SetActive(false);
